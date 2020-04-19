@@ -3,6 +3,9 @@
     <ion-title>
       camera
     </ion-title>
+    <div slot="end">
+      <ion-button (click)="getImage()">Open Camera</ion-button>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -13,11 +16,25 @@
     </ion-toolbar>
   </ion-header>
 
-  <div>
-    <ion-button (click)="getImage()"></ion-button>
-  </div>
   <div  *ngIf="image">
-    <strong>captured image is</strong>
     <img [src]="DomSanitizer.bypassSecurityTrustUrl(image)" />
   </div>
+  <div *ngIf="image">
+    <strong>Query Now</strong>
+    <div style="display: flex;justify-content: space-between;padding: 10px;">
+      <ion-item slot="start" style="width: 50%;">
+        <ion-input placeholder="Enter your Query" [(ngModel)]="queryData"></ion-input>
+      </ion-item>
+      <ion-button  *ngIf="!QueryDataRecieved" (click)="query(queryData)" slot="end">Query</ion-button>
+      <ion-button  *ngIf="QueryDataRecieved" (click)="query(queryData)" slot="end">Query</ion-button>  
+    </div>
+    <ion-list *ngIf="QueryDataRecieved">
+      <ion-item>
+        <div>{{QueryDataRecieved}}</div>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>
+<div class="spinner"  *ngIf="spinner" >
+  <ion-spinner name="crescent"></ion-spinner>
+</div>
