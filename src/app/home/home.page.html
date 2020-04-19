@@ -17,8 +17,23 @@
   </ion-header>
 
   <div  *ngIf="image">
+    <!-- <img [src]="image" /> -->
     <img [src]="DomSanitizer.bypassSecurityTrustUrl(image)" />
   </div>
+  <ion-grid *ngIf="imagePredictionData.length>0">
+    <ion-row>
+      <ion-col>
+        Caption
+      </ion-col>
+      <ion-col>
+        Probability
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let f of imagePredictionData">
+      <ion-col>{{f.caption}}</ion-col>
+      <ion-col>{{f.probability}}</ion-col>
+    </ion-row>
+  </ion-grid>
   <div *ngIf="image">
     <strong>Query Now</strong>
     <div style="display: flex;justify-content: space-between;padding: 10px;">
