@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      camera
+      Image Caption Generator
     </ion-title>
     <div slot="end">
       <ion-button (click)="getImage()">Open Camera</ion-button>
@@ -20,34 +20,50 @@
     <!-- <img [src]="image" /> -->
     <img [src]="DomSanitizer.bypassSecurityTrustUrl(image)" />
   </div>
-  <ion-grid *ngIf="imagePredictionData.length>0">
-    <ion-row>
-      <ion-col>
-        Caption
-      </ion-col>
-      <ion-col>
-        Probability
-      </ion-col>
-    </ion-row>
-    <ion-row *ngFor="let f of imagePredictionData">
-      <ion-col>{{f.caption}}</ion-col>
-      <ion-col>{{f.probability}}</ion-col>
-    </ion-row>
-  </ion-grid>
-  <div *ngIf="image">
-    <strong>Query Now</strong>
-    <div style="display: flex;justify-content: space-between;padding: 10px;">
+
+  <div class="query-box" *ngIf="imagePredictionData.length != 0">
+    <h1>Query Now</h1>
+    <div class="query-box-child-1">
       <ion-item slot="start" style="width: 50%;">
         <ion-input placeholder="Enter your Query" [(ngModel)]="queryData"></ion-input>
       </ion-item>
       <ion-button  *ngIf="!QueryDataRecieved" (click)="query(queryData)" slot="end">Query</ion-button>
       <ion-button  *ngIf="QueryDataRecieved" (click)="query(queryData)" slot="end">Query</ion-button>  
     </div>
-    <ion-list *ngIf="QueryDataRecieved">
+    <ion-list class="query-box-child-2" *ngIf="QueryDataRecieved">
       <ion-item>
         <div>{{QueryDataRecieved}}</div>
       </ion-item>
     </ion-list>
+  </div>
+
+
+  <div class="bg" (click)="close()"></div>
+
+  <div (click)="open()" class="bottomSheet" (touchmove)="touchMove($event)" (touchend)="touchEnd()">
+    <div  class="swipe-handler"></div>
+
+    <div class="content ion-padding">
+      <ion-grid *ngIf="imagePredictionData.length>0">
+        <ion-row >
+          <ion-col>
+            <h1>Caption</h1>
+          </ion-col>
+          <ion-col>
+            <h1>Probability</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngFor="let f of imagePredictionData">
+          <ion-col>{{f.caption}}</ion-col>
+          <ion-col>{{f.probability}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+  </div>
+
+  <div>
+    
   </div>
 </ion-content>
 <div class="spinner"  *ngIf="spinner" >

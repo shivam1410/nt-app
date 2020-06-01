@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
+import { FirebaseService } from './firebase.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModelService {
 
-  $URL: string=`http://max-image-caption-generator.max.us-south.containers.appdomain.cloud/`;
+  $URL: string=`http://max-image-caption-generator.codait-prod-41208c73af8fca213512856c7a09db52-0000.us-east.containers.appdomain.cloud/`;
+
   base64Image;
   constructor(
     private http: Http,
+    private firebase: FirebaseService,
   ) { }
   
   async fetchdata(base64Image){
@@ -18,13 +21,14 @@ export class ModelService {
 
     let blob = this.getBlob(base64Image, 'image/jpeg')
     console.log(blob.size)
-
+    let randomId = this.firebase.uploadImage(blob);
     let formData = new FormData(); 
     formData.append('image',blob,'image')
     
 
     return this.http.post(url,formData).toPromise()
     .then(d=>{
+      console.log("return data ~~~", d)
       return d.json();
     })
     .catch(e=>{

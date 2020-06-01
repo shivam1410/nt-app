@@ -17,6 +17,12 @@ export class HomePage implements OnInit {
   spinner: boolean = false;
   imagePrediction;
   imagePredictionData = [];
+
+  currentPosition;
+  height;
+  minimumThreshold;
+  stratPosition;
+
   constructor(
     private camera: Camera,
     public DomSanitizer: DomSanitizer,
@@ -25,6 +31,9 @@ export class HomePage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.close()
+    this.height  = document.querySelector(".bottomSheet").clientHeight;
+    console.log("height", this.height);
   }
 
   async getImage(){
@@ -44,12 +53,68 @@ export class HomePage implements OnInit {
     this.imagePrediction =await this.model.fetchdata(imageData);
     console.log(this.imagePrediction)
     this.imagePredictionData = this.imagePrediction["predictions"]
+    this.open();
     console.log(this.imagePrediction.json())
 
   }
 
   query(queryData){
     this.model.queryModel(queryData,this.image);
+  }
+
+
+  open(){
+    (<HTMLStyleElement>document.querySelector(".bottomSheet")).style.bottom = "0px";
+    (<HTMLStyleElement>document.querySelector(".bg")).style.display = "block";
+  }
+
+  close(){
+    this.stratPosition = 0;
+    this.height  = document.querySelector(".bottomSheet").clientHeight;
+    if(this.height> 50){
+      this.currentPosition = this.height - 40;
+    }
+    else{
+      this.currentPosition = 50;
+    }
+    
+    (<HTMLStyleElement>document.querySelector(".bottomSheet")).style.transform = "translate3d(0px," + this.currentPosition + "px,0px)";
+    (<HTMLStyleElement>document.querySelector(".bottomSheet")).style.bottom = `-${this.currentPosition}px`;
+    (<HTMLStyleElement>document.querySelector(".bottomSheet")).style.transform = "translate3d(0px,0px,0px)";
+    (<HTMLStyleElement>document.querySelector(".bg")).style.display = "none";
+  }
+
+  touchMove(ev: TouchEvent){ 
+    if(this.stratPosition == 0){
+      this.stratPosition = ev.touches[0].clientY;
+    }
+    this.height  = document.querySelector(".bottomSheet").clientHeight;
+
+    var y = ev.touches[0].clientY;
+
+    this.currentPosition = y- this.stratPosition;
+
+    if(this.currentPosition>0 && this.stratPosition>0){
+      (<HTMLStyleElement>document.querySelector(".bottomSheet")).style.transform = "translate3d(0px," + this.currentPosition + "px,0px)";
+    }
+
+    this.minimumThreshold = this.height -130;
+    if(this.currentPosition > this.minimumThreshold){
+      this.currentPosition = this.height - 40;
+      (<HTMLStyleElement>document.querySelector(".bottomSheet")).style.transform = "translate3d(0px," + this.currentPosition + "px,0px)";
+    }
+  }
+
+  touchEnd(){
+    this.minimumThreshold = this.height -130;
+    let finalPosition = 30 - this.height;
+    if(this.currentPosition < this.minimumThreshold){
+      (<HTMLStyleElement>document.querySelector(".bottomSheet")).style.transform = "translate3d(0px,0px,0px)";
+    }
+    else{
+      (<HTMLStyleElement>document.querySelector(".bottomSheet")).style.bottom = `${finalPosition}`;
+      console.log(this.minimumThreshold, this.currentPosition, this.height)
+    }
   }
   
 

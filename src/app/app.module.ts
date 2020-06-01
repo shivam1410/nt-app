@@ -11,31 +11,26 @@ import { AppRoutingModule } from './app-routing.module';
 import { ModelService } from './service/model.service';
 import { HttpModule } from '@angular/http';
 
-import { AngularFireModule } from '@angular/fire';         // can be skipped since imported in component.ts file
-//import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireStorageModule } from '@angularfire2/storage';
-//import { AngularFireAuthModule } from '@angular/fire/auth';  // can be skipped since imported in component.ts file
+import { environment } from '../environments/environment';
+
+import { AngularFireModule} from 'angularfire2';
+import { AngularFireStorageModule} from 'angularfire2/storage';
+import { FirebaseService } from './service/firebase.service';
+
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpModule, AngularFireModule.initializeApp({
-     apiKey: "AIzaSyDP7SvMfEHh_F1xzr88EHwHbfoxb5Ir2pQ",
-     authDomain: "shubhendra-tomar.firebaseapp.com",
-     storageBucket: "shubhendra-tomar.appspot.com",
-     projectId: "shubhendra-tomar",
-     databaseURL: "https://shubhendra-tomar.firebaseio.com",
-     messagingSenderId: "545952674743",
-     appId: "1:545952674743:web:a1b1c145b302d84c26ae32",
-     measurementId: "G-1BFL56DJSF",
-   }),
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpModule,
+  AngularFireModule.initializeApp(environment.firebase),
    AngularFireStorageModule
 ],
   providers: [
     StatusBar,
     SplashScreen,
     ModelService,
+    FirebaseService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

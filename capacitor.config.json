@@ -1,5 +1,5 @@
 {
-  "appId": "www.ionic.naitra",
+  "appId": "io.ionic.starter",
   "appName": "naitra",
   "bundledWebRuntime": false,
   "npmClient": "npm",
