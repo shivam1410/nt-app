@@ -19,7 +19,7 @@ export class HomePage implements OnInit {
   imagePredictionData = [];
   constructor(
     private camera: Camera,
-    private DomSanitizer: DomSanitizer,
+    public DomSanitizer: DomSanitizer,
     private model: ModelService,
     private file: File
   ) {}

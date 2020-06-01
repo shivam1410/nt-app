@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "nt-app",
+  "appId": "www.ionic.naitra",
+  "appName": "naitra",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
